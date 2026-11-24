@@ -1,0 +1,265 @@
+:root {
+  --bg: #E8F6FF;
+  --header: #1E6FE8;
+  --paper: #FFFFFF;
+  --ink: #1A2B4A;
+  --muted: #5A6A85;
+  --orange: #FF7A18;
+  --green: #1FA971;
+  --red: #E23D3D;
+  --yellow: #FFD054;
+  --pink: #FF6B9A;
+  --purple: #7B6CFF;
+  --sky: #3BA3FF;
+  --line: #D3E4F5;
+  --soft-green: #E5F8EE;
+  --soft-red: #FDECEC;
+  --font: "Times New Roman", Times, serif;
+}
+
+* { box-sizing: border-box; font-family: var(--font); }
+
+html, body, #root { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+
+body {
+  min-height: 100vh;
+  padding: 16px;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+.shell { max-width: 1080px; width: 100%; margin: 0 auto; }
+
+h1 { font-size: 28px; font-weight: 700; margin: 0; line-height: 1.25; }
+
+.sub { font-size: 16px; color: var(--muted); margin: 10px 0 0; line-height: 1.45; }
+
+.card {
+  background: var(--paper);
+  border-radius: 28px;
+  padding: 20px;
+  border: 2px solid var(--line);
+}
+
+.hero { text-align: center; padding: 28px; }
+
+.big-emoji { font-size: 40px; margin-bottom: 8px; }
+
+.stack { display: flex; flex-direction: column; gap: 16px; }
+
+.row { display: flex; flex-wrap: wrap; gap: 14px; }
+
+button.btn {
+  background: var(--sky);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 16px 22px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 68px;
+  font-family: var(--font);
+  flex: 1 1 180px;
+}
+
+button.btn:disabled { background: #C9D4E3; cursor: default; }
+
+button.btn.wide { width: 100%; flex: 1 1 100%; }
+
+button.btn.orange { background: var(--orange); }
+
+button.btn.green { background: var(--green); }
+
+button.btn.purple { background: var(--purple); }
+
+button.btn.pink { background: var(--pink); }
+
+button.btn.header { background: var(--header); }
+
+button.back {
+  background: transparent;
+  border: none;
+  color: var(--header);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 10px 0;
+  min-height: 48px;
+  font-family: var(--font);
+}
+
+textarea, input[type="text"] {
+  width: 100%;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--paper);
+}
+
+textarea {
+  min-height: 260px;
+  font-size: 18px;
+  line-height: 1.5;
+  padding: 18px;
+  border-radius: 20px;
+  border: 2px solid var(--line);
+  resize: vertical;
+}
+
+input[type="text"] {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  padding: 16px 14px;
+  border-radius: 18px;
+  border: 3px solid var(--header);
+  min-height: 76px;
+}
+
+input[type="text"]:disabled { opacity: 0.8; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.chip {
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 16px;
+}
+
+.flash {
+  width: 100%;
+  min-height: 240px;
+  border: none;
+  border-radius: 32px;
+  cursor: pointer;
+  padding: 24px;
+  font-family: var(--font);
+  text-align: center;
+}
+
+.flash.front { background: var(--header); color: #fff; }
+
+.flash.back { background: var(--yellow); color: var(--ink); }
+
+.flash .side { font-size: 16px; font-weight: 700; opacity: 0.85; }
+
+.flash .word {
+  font-size: 52px;
+  font-weight: 700;
+  margin: 20px 0;
+  line-height: 1.15;
+  word-break: break-word;
+}
+
+.bar { margin-top: 12px; height: 14px; border-radius: 999px; background: var(--line); overflow: hidden; }
+
+.bar > div { height: 100%; background: var(--green); width: 0; }
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  padding: 16px 18px;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font);
+  min-height: 76px;
+}
+
+.option:disabled { cursor: default; }
+
+.option.correct { background: var(--soft-green); border: 3px solid var(--green); }
+
+.option.wrong { background: var(--soft-red); border: 3px solid var(--red); }
+
+.letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--header);
+  color: #fff;
+  font-weight: 700;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.option.correct .letter { background: var(--green); }
+
+.mask {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  text-align: center;
+  margin: 20px 0 0;
+  font-family: var(--font);
+  word-break: break-word;
+}
+
+.mask.phrase { font-size: 36px; letter-spacing: 1px; }
+
+.note { font-size: 16px; color: var(--orange); margin: 8px 0 0; }
+
+.ok { color: var(--green); font-weight: 700; }
+
+.pick { outline: 4px solid var(--yellow); }
+
+.feedback { margin-top: 18px; text-align: center; }
+
+.feedback.yes { background: var(--soft-green); border-color: var(--green); }
+
+.feedback.no { background: var(--soft-red); border-color: var(--red); }
+
+.scoreline { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 8px; }
+
+.scoreline p { margin: 0; font-size: 18px; font-weight: 700; }
+
+.stars { font-size: 40px; margin: 0; }
+
+.quiz-type { padding-bottom: 200px; }
+
+@media (min-width: 768px) {
+  body { padding: 28px 32px 40px; }
+  h1 { font-size: 36px; }
+  .sub, .note, .chip, .flash .side { font-size: 20px; }
+  .card { padding: 32px; }
+  .hero { padding: 40px; }
+  .big-emoji, .stars { font-size: 48px; }
+  button.btn { min-height: 72px; font-size: 24px; padding: 18px 24px; }
+  button.back { font-size: 22px; min-height: 52px; }
+  textarea { min-height: 300px; font-size: 22px; }
+  input[type="text"] { font-size: 32px; min-height: 84px; }
+  .flash { min-height: 340px; padding: 36px; }
+  .flash .word { font-size: 64px; }
+  .option { min-height: 84px; font-size: 26px; }
+  .letter { width: 52px; height: 52px; font-size: 24px; }
+  .mask { font-size: 52px; }
+  .mask.phrase { font-size: 44px; }
+  .scoreline p { font-size: 22px; }
+}
+
+@media (min-width: 768px) and (orientation: landscape) {
+  body { padding: 16px 40px 28px; }
+  .flash { min-height: 240px; padding: 24px 36px; }
+  .flash .word { font-size: 52px; margin: 12px 0; }
+  .hero { padding: 28px 36px; }
+  textarea { min-height: 180px; }
+  .quiz-type { padding-bottom: 160px; }
+}
+
+@media (min-width: 1024px) {
+  .shell { max-width: 1080px; }
+  h1 { font-size: 40px; }
+}
