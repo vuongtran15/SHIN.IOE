@@ -69,8 +69,13 @@ Mở `src/data/defaults.ts`. Mỗi phần tử là một cặp `[tiếng Anh, ng
 
 Luật ẩn chữ, đọc dòng và `a` / `an` nằm ở `src/lib/logic.ts`. Phần giao diện nằm ở `src/screens.tsx` và `src/App.tsx`.
 
-## Thêm vào màn hình chính máy tính bảng
+## Thêm vào màn hình chính
 
-Bản đã dựng có `manifest.webmanifest`, biểu tượng trong `public/icons` và service worker. Trên máy tính bảng, mở trang bằng trình duyệt rồi chọn **Thêm vào màn hình chính** / **Add to Home Screen**. Ứng dụng mở toàn màn hình, nút và ô gõ chữ lớn. Khi bé gõ, ô nhập được giữ phía trên bàn phím.
+Tên trên màn hình chính là **SHIN IOE**. Mở từ biểu tượng đó thì trang chạy toàn màn hình, không còn thanh địa chỉ của trình duyệt.
+
+- iPhone / iPad (Safari): nút Chia sẻ, rồi **Thêm vào màn hình chính**.
+- Android (Chrome): menu trình duyệt, rồi **Cài đặt ứng dụng** hoặc **Thêm vào màn hình chính**.
+
+Nội dung chừa khoảng trống cho tai thỏ và thanh dưới. Khi bé gõ, ô nhập được giữ phía trên bàn phím.
 
 Máy không có giọng đọc tiếng Anh vẫn dùng được. Nút loa vẫn hiện, và trang báo là máy chưa đọc được.
