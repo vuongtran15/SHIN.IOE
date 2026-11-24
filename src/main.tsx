@@ -8,7 +8,7 @@ createRoot(root).render(<App />);
 
 if (import.meta.env.PROD && "serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(() => {
+    navigator.serviceWorker.register("/sw.js", { scope: "/", updateViaCache: "none" }).catch(() => {
       /* Máy không nhận service worker thì ứng dụng vẫn học bình thường. */
     });
   });

@@ -23,10 +23,11 @@ html, body, #root { margin: 0; padding: 0; background: var(--bg); color: var(--i
 
 body {
   min-height: 100vh;
-  padding: 16px;
-  padding-left: max(16px, env(safe-area-inset-left));
+  min-height: 100dvh;
+  padding-top: max(16px, env(safe-area-inset-top));
   padding-right: max(16px, env(safe-area-inset-right));
   padding-bottom: max(16px, env(safe-area-inset-bottom));
+  padding-left: max(16px, env(safe-area-inset-left));
 }
 
 .shell { max-width: 1080px; width: 100%; margin: 0 auto; }
@@ -230,10 +231,15 @@ input[type="text"]:disabled { opacity: 0.8; }
 
 .stars { font-size: 40px; margin: 0; }
 
-.quiz-type { padding-bottom: 200px; }
+.quiz-type { padding-bottom: calc(200px + env(safe-area-inset-bottom)); }
 
 @media (min-width: 768px) {
-  body { padding: 28px 32px 40px; }
+  body {
+    padding-top: max(28px, env(safe-area-inset-top));
+    padding-right: max(32px, env(safe-area-inset-right));
+    padding-bottom: max(40px, env(safe-area-inset-bottom));
+    padding-left: max(32px, env(safe-area-inset-left));
+  }
   h1 { font-size: 36px; }
   .sub, .note, .chip, .flash .side { font-size: 20px; }
   .card { padding: 32px; }
@@ -253,12 +259,17 @@ input[type="text"]:disabled { opacity: 0.8; }
 }
 
 @media (min-width: 768px) and (orientation: landscape) {
-  body { padding: 16px 40px 28px; }
+  body {
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-right: max(40px, env(safe-area-inset-right));
+    padding-bottom: max(28px, env(safe-area-inset-bottom));
+    padding-left: max(40px, env(safe-area-inset-left));
+  }
   .flash { min-height: 240px; padding: 24px 36px; }
   .flash .word { font-size: 52px; margin: 12px 0; }
   .hero { padding: 28px 36px; }
   textarea { min-height: 180px; }
-  .quiz-type { padding-bottom: 160px; }
+  .quiz-type { padding-bottom: calc(160px + env(safe-area-inset-bottom)); }
 }
 
 @media (min-width: 1024px) {
