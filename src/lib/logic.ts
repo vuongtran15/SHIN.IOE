@@ -393,11 +393,14 @@ export function allAnQuestions(words: readonly Word[]): Question[] {
   return pool;
 }
 
-export function buildAnQuestions(words: readonly Word[], count: number): Question[] {
-  const pool = shuffled(allAnQuestions(words));
-  if (pool.length === 0 || count <= 0) return [];
-  const questions: Question[] = [];
+export const QUESTION_COUNTS = [10, 20, 30, 50] as const;
+export type QuestionCount = (typeof QUESTION_COUNTS)[number];
+
+function cycleUntil<T>(items: T[], count: number): T[] {
+  if (items.length === 0 || count <= 0) return [];
+  const questions: T[] = [];
   let i = 0;
+  const pool = items.slice();
   while (questions.length < count) {
     questions.push(pool[i % pool.length]);
     i += 1;
@@ -407,6 +410,23 @@ export function buildAnQuestions(words: readonly Word[], count: number): Questio
     }
   }
   return questions;
+}
+
+export function buildAnQuestions(words: readonly Word[], count: number): Question[] {
+  return cycleUntil(shuffled(allAnQuestions(words)), count);
+}
+
+export function quizLengthNote(words: readonly Word[], count: number, mode: string): string {
+  if (count <= 0) return "";
+  if (mode === "a-an") {
+    const available = allAnQuestions(words).length;
+    if (available === 0) return "Chưa tạo được câu a / an. Hãy thêm danh từ như cat hoặc apple.";
+    if (available < count) return "Chưa đủ câu a / an khác nhau, nên một số câu sẽ được hỏi lại.";
+    return "";
+  }
+  if (words.length === 0) return "Chưa tạo được câu hỏi. Hãy thêm từ vào danh sách nhé.";
+  if (words.length < count) return "Danh sách chưa đủ câu khác nhau, nên một số từ sẽ được hỏi lại.";
+  return "";
 }
 
 function uniqueField(words: readonly Word[], field: "en" | "vi", except: string): string[] {
@@ -521,6 +541,7 @@ export function buildQuestions(words: readonly Word[], count: number, mode: stri
     if (!q) q = makeQuestion("type", word, words);
     if (q) questions.push(q);
   }
+  if (questions.length > 0 && questions.length < count) return cycleUntil(questions, count);
   return questions;
 }
 

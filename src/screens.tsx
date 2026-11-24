@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { Question, Word } from "./lib/logic";
-import { answerLabel, resultTitle, sameWord, splitTokens, starCount } from "./lib/logic";
+import { answerLabel, QUESTION_COUNTS, type QuestionCount, resultTitle, sameWord, splitTokens, starCount } from "./lib/logic";
 import { keepNodeVisible } from "./lib/speech";
 
 export function SpeechNote({ ok }: { ok: boolean }) {
@@ -198,6 +198,7 @@ export function SetupScreen({
   total,
   mode,
   speechOk,
+  repeatNote,
   onCount,
   onMode,
   onStart,
@@ -207,7 +208,8 @@ export function SetupScreen({
   total: number;
   mode: "all" | "a-an";
   speechOk: boolean;
-  onCount: (count: 10 | 20) => void;
+  repeatNote: string;
+  onCount: (count: QuestionCount) => void;
   onMode: (mode: "all" | "a-an") => void;
   onStart: () => void;
   onBack: () => void;
@@ -227,14 +229,14 @@ export function SetupScreen({
       </p>
       <div style={{ height: 20 }} />
       <p style={{ fontSize: "clamp(18px, 2.3vw, 22px)", fontWeight: 700, margin: "0 0 12px" }}>Chọn số câu</p>
-      <div className="row">
-        <button type="button" className={count === 10 ? "btn header pick" : "btn"} onClick={() => onCount(10)}>
-          10 câu
-        </button>
-        <button type="button" className={count === 20 ? "btn header pick" : "btn"} onClick={() => onCount(20)}>
-          20 câu
-        </button>
+      <div className="row counts">
+        {QUESTION_COUNTS.map((n) => (
+          <button key={n} type="button" className={count === n ? "btn header pick" : "btn"} onClick={() => onCount(n)}>
+            {n} câu
+          </button>
+        ))}
       </div>
+      {repeatNote ? <p className="note">{repeatNote}</p> : null}
       <div style={{ height: 20 }} />
       <p style={{ fontSize: "clamp(18px, 2.3vw, 22px)", fontWeight: 700, margin: "0 0 12px" }}>Dạng bài</p>
       <div className="row">
