@@ -6,6 +6,7 @@ import {
   articleFor,
   buildAnQuestions,
   buildQuestions,
+  quizLengthNote,
   cleanToken,
   collectAnNouns,
   looksLikeSentence,
@@ -285,6 +286,28 @@ describe("a / an", () => {
     expect(mixed).toHaveLength(10);
     const only = buildQuestions(parseWordList(DEFAULT_LIST), 10, "a-an");
     expect(only.every((q) => q.kind === "a-an")).toBe(true);
+  });
+
+  it("vẫn đủ 30 và 50 câu khi danh sách ngắn, và báo khi phải hỏi lại", () => {
+    const few: Word[] = [{ en: "cat", vi: "con mèo" }];
+    for (const count of [10, 20, 30, 50]) {
+      const mixed = buildQuestions(few, count, "all");
+      expect(mixed).toHaveLength(count);
+      expect(mixed.every((q) => q.answer.trim().length > 0)).toBe(true);
+      const drill = buildQuestions(few, count, "a-an");
+      expect(drill).toHaveLength(count);
+      expect(drill.every((q) => q.kind === "a-an" && q.options.join(",") === "a,an")).toBe(true);
+    }
+    expect(quizLengthNote(few, 50, "all")).toBe("Danh sách chưa đủ câu khác nhau, nên một số từ sẽ được hỏi lại.");
+    expect(quizLengthNote(few, 10, "all")).toBe("Danh sách chưa đủ câu khác nhau, nên một số từ sẽ được hỏi lại.");
+    expect(quizLengthNote(few, 50, "a-an")).toBe("Chưa đủ câu a / an khác nhau, nên một số câu sẽ được hỏi lại.");
+    expect(quizLengthNote([], 30, "all")).toBe("Chưa tạo được câu hỏi. Hãy thêm từ vào danh sách nhé.");
+    expect(buildQuestions([], 30, "all")).toEqual([]);
+    expect(quizLengthNote([], 50, "a-an")).toBe("Chưa đủ câu a / an khác nhau, nên một số câu sẽ được hỏi lại.");
+    expect(quizLengthNote(parseWordList(DEFAULT_LIST), 50, "all")).toBe("");
+    expect(quizLengthNote(parseWordList(DEFAULT_LIST), 50, "a-an")).toBe("");
+    expect(buildQuestions(parseWordList(DEFAULT_LIST), 30, "all")).toHaveLength(30);
+    expect(buildQuestions(parseWordList(DEFAULT_LIST), 50, "a-an")).toHaveLength(50);
   });
 });
 

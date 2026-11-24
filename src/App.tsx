@@ -2,7 +2,9 @@ import { useEffect, useReducer } from "react";
 import { DEFAULT_LIST } from "./data/defaults";
 import {
   buildQuestions,
+  quizLengthNote,
   parseWordList,
+  type QuestionCount,
   pickOne,
   shuffled,
   YES_MSG,
@@ -28,7 +30,7 @@ type State = {
   flashIndex: number;
   flipped: boolean;
   flashCards: Word[];
-  qCount: 10 | 20;
+  qCount: QuestionCount;
   quizMode: QuizMode;
   questions: Question[];
   qIndex: number;
@@ -51,10 +53,10 @@ type Action =
   | { type: "flash-prev" }
   | { type: "flash-next" }
   | { type: "flash-shuffle"; cards: Word[] }
-  | { type: "set-count"; count: 10 | 20 }
+  | { type: "set-count"; count: QuestionCount }
   | { type: "set-mode"; mode: QuizMode }
   | { type: "open-setup"; storageOk: boolean }
-  | { type: "start-quiz"; count: 10 | 20; mode: QuizMode; questions: Question[] }
+  | { type: "start-quiz"; count: QuestionCount; mode: QuizMode; questions: Question[] }
   | { type: "grade"; answer: string; ok: boolean; feedback: string }
   | { type: "typed"; text: string }
   | { type: "next" }
@@ -211,7 +213,7 @@ export function App() {
     dispatch({ type: "open-setup", storageOk });
   }
 
-  function startQuiz(count: 10 | 20, mode: QuizMode) {
+  function startQuiz(count: QuestionCount, mode: QuizMode) {
     const qs = buildQuestions(parseWordList(state.listText), count, mode);
     if (qs.length === 0) return;
     dispatch({ type: "start-quiz", count, mode, questions: qs });
@@ -276,6 +278,7 @@ export function App() {
           total={words.length}
           mode={state.quizMode}
           speechOk={state.speechOk}
+          repeatNote={quizLengthNote(words, state.qCount, state.quizMode)}
           onCount={(count) => dispatch({ type: "set-count", count })}
           onMode={(mode) => dispatch({ type: "set-mode", mode })}
           onStart={() => startQuiz(state.qCount, state.quizMode)}

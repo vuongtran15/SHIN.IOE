@@ -50,6 +50,8 @@ h1 { font-size: 28px; font-weight: 700; margin: 0; line-height: 1.25; }
 
 .row { display: flex; flex-wrap: wrap; gap: 14px; }
 
+.row.counts button.btn { flex: 1 1 140px; }
+
 button.btn {
   background: var(--sky);
   color: #fff;
