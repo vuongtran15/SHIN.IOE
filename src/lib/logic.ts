@@ -487,7 +487,7 @@ export function makeQuestion(kind: QuestionKind, word: Word, words: readonly Wor
     return withSpeak({
       kind,
       word,
-      prompt: word.vi ? "Điền từ còn thiếu: " + word.vi : "Gõ từ còn thiếu trong chỗ trống",
+      prompt: word.vi ? "Điền chữ còn thiếu: " + word.vi : "Chạm các chữ còn thiếu",
       answer: puzzle.answer,
       options: [],
       mask: puzzle.mask,
@@ -500,11 +500,11 @@ export function makeQuestion(kind: QuestionKind, word: Word, words: readonly Wor
     word,
     prompt: word.vi
       ? isPhrase
-        ? "Gõ câu tiếng Anh: " + word.vi
-        : "Gõ từ tiếng Anh: " + word.vi
+        ? "Chọn chữ để viết câu: " + word.vi
+        : "Chọn chữ để viết từ: " + word.vi
       : isPhrase
-        ? "Gõ cả câu tiếng Anh bạn vừa nghe"
-        : "Gõ từ tiếng Anh bạn vừa nghe",
+        ? "Chọn chữ để viết câu bạn vừa nghe"
+        : "Chọn chữ để viết từ bạn vừa nghe",
     answer: word.en,
     options: [],
     mask: "",

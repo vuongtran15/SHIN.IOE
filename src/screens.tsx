@@ -1,7 +1,6 @@
-import { useEffect, useRef } from "react";
 import type { Question, Word } from "./lib/logic";
-import { answerLabel, QUESTION_COUNTS, type QuestionCount, resultTitle, sameWord, splitTokens, starCount } from "./lib/logic";
-import { keepNodeVisible } from "./lib/speech";
+import { answerLabel, QUESTION_COUNTS, type QuestionCount, resultTitle, sameWord, starCount } from "./lib/logic";
+import { LetterTiles } from "./LetterTiles";
 
 export function SpeechNote({ ok }: { ok: boolean }) {
   if (ok) return null;
@@ -248,7 +247,7 @@ export function SetupScreen({
         </button>
       </div>
       <div style={{ height: 20 }} />
-      <button type="button" className="btn green wide" style={{ fontSize: "clamp(22px, 3vw, 28px)" }} onClick={onStart}>
+      <button type="button" className="btn green wide" onClick={onStart}>
         Bắt đầu 🎉
       </button>
       <p className="sub">{note}</p>
@@ -263,13 +262,11 @@ export function QuizScreen({
   score,
   answered,
   picked,
-  typed,
   wasCorrect,
   feedback,
   speechOk,
   questionKey,
   onGrade,
-  onTyped,
   onNext,
   onSpeak,
   onBack,
@@ -279,46 +276,16 @@ export function QuizScreen({
   score: number;
   answered: boolean;
   picked: string;
-  typed: string;
   wasCorrect: boolean;
   feedback: string;
   speechOk: boolean;
   questionKey: string;
   onGrade: (answer: string) => void;
-  onTyped: (text: string) => void;
   onNext: () => void;
   onSpeak: (text: string) => void;
   onBack: () => void;
 }) {
   const currentQ = questions[qIndex];
-  const typingOpen = Boolean(currentQ && currentQ.options.length === 0 && !answered);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const viewport = window.visualViewport;
-    if (!viewport) return;
-    const onChange = () => {
-      const field = document.querySelector('input[type="text"]');
-      if (field instanceof HTMLElement && document.activeElement === field) keepNodeVisible(field);
-    };
-    viewport.addEventListener("resize", onChange);
-    viewport.addEventListener("scroll", onChange);
-    return () => {
-      viewport.removeEventListener("resize", onChange);
-      viewport.removeEventListener("scroll", onChange);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!typingOpen) return;
-    const input = inputRef.current;
-    const focusTimer = window.setTimeout(() => input?.focus(), 0);
-    const scrollTimer = window.setTimeout(() => keepNodeVisible(input), 50);
-    return () => {
-      window.clearTimeout(focusTimer);
-      window.clearTimeout(scrollTimer);
-    };
-  }, [questionKey, typingOpen]);
 
   if (!currentQ) {
     return (
@@ -330,19 +297,12 @@ export function QuizScreen({
   }
 
   const progress = ((qIndex + (answered ? 1 : 0)) / questions.length) * 100;
-  const isPhraseMask = splitTokens(currentQ.word.en).length > 1;
-  const typePlaceholder =
-    currentQ.kind === "fill"
-      ? "Gõ từ còn thiếu"
-      : splitTokens(currentQ.word.en).length > 1
-        ? "Gõ cả câu tiếng Anh"
-        : "Gõ từ tiếng Anh";
   const listenNow = answered ? currentQ.speakText || currentQ.word.en : currentQ.listenText || currentQ.word.en;
   const letters = ["A", "B", "C"];
   const isLast = qIndex + 1 >= questions.length;
 
   return (
-    <div className={typingOpen ? "quiz-type" : undefined}>
+    <div className="quiz">
       <BackButton onClick={onBack} />
       <div className="scoreline">
         <p>
@@ -353,20 +313,20 @@ export function QuizScreen({
       <div className="bar" aria-hidden="true">
         <div style={{ width: `${progress}%` }} />
       </div>
-      <div style={{ height: 18 }} />
+      <div style={{ height: 8 }} />
       <div className="card">
         {currentQ.kind === "a-an" ? (
           <>
-            <p style={{ margin: 0, fontSize: "clamp(18px, 2.3vw, 22px)", fontWeight: 700, color: "#5A6A85" }}>
+            <p style={{ margin: 0, fontSize: "clamp(16px, 2vw, 18px)", fontWeight: 700, color: "#5A6A85" }}>
               Chọn a hoặc an
             </p>
             <p
               style={{
-                fontSize: "clamp(32px, 5vw, 48px)",
+                fontSize: "clamp(24px, 4vw, 34px)",
                 fontWeight: 700,
                 textAlign: "center",
-                margin: "16px 0 0",
-                lineHeight: 1.3,
+                margin: "8px 0 0",
+                lineHeight: 1.25,
                 wordBreak: "break-word",
               }}
             >
@@ -374,23 +334,15 @@ export function QuizScreen({
             </p>
           </>
         ) : (
-          <p style={{ margin: 0, fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, lineHeight: 1.35 }}>{currentQ.prompt}</p>
+          <p style={{ margin: 0, fontSize: "clamp(18px, 2.4vw, 22px)", fontWeight: 700, lineHeight: 1.3 }}>{currentQ.prompt}</p>
         )}
-        {currentQ.kind === "fill" ? (
-          <>
-            <p className={isPhraseMask ? "mask phrase" : "mask"}>{currentQ.mask}</p>
-            <p className="sub" style={{ textAlign: "center" }}>
-              Gõ cả từ đang bị ẩn, không cần gõ những từ còn lại.
-            </p>
-          </>
-        ) : null}
         {currentQ.kind === "vi-choice" ? <p className="sub">Bấm loa để nghe lại từ tiếng Anh.</p> : null}
       </div>
-      <div style={{ height: 14 }} />
+      <div style={{ height: 8 }} />
       <button type="button" className="btn wide" onClick={() => onSpeak(listenNow)}>
         {currentQ.kind === "a-an" && !answered ? "🔊 Nghe từ" : "🔊 Nghe phát âm"}
       </button>
-      <div style={{ height: 14 }} />
+      <div style={{ height: 8 }} />
       {currentQ.options.length > 0 ? (
         <div className="stack">
           {currentQ.options.map((opt, i) => {
@@ -406,42 +358,18 @@ export function QuizScreen({
           })}
         </div>
       ) : (
-        <div>
-          <input
-            ref={inputRef}
-            key={`${questionKey}-${answered ? "done" : "open"}`}
-            type="text"
-            value={typed}
-            placeholder={typePlaceholder}
-            aria-label={typePlaceholder}
-            autoCapitalize="none"
-            autoComplete="off"
-            spellCheck={false}
-            disabled={answered}
-            onChange={(event) => onTyped(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                onGrade(event.currentTarget.value);
-              }
-            }}
-            onFocus={(event) => keepNodeVisible(event.currentTarget)}
-          />
-          {!answered ? (
-            <button
-              type="button"
-              className="btn orange wide"
-              style={{ marginTop: 12 }}
-              onClick={() => onGrade(inputRef.current?.value ?? typed)}
-            >
-              Kiểm tra
-            </button>
-          ) : null}
-        </div>
+        <LetterTiles
+          key={questionKey}
+          kind={currentQ.kind === "fill" ? "fill" : "type"}
+          mask={currentQ.mask}
+          answer={currentQ.answer}
+          answered={answered}
+          onGrade={onGrade}
+        />
       )}
       {answered ? (
         <div className={wasCorrect ? "card feedback yes" : "card feedback no"}>
-          <p style={{ fontSize: "clamp(26px, 3.4vw, 34px)", fontWeight: 700, margin: 0 }}>
+          <p style={{ fontSize: "clamp(20px, 2.8vw, 26px)", fontWeight: 700, margin: 0 }}>
             {wasCorrect ? "✨ " : "💖 "}
             {feedback}
           </p>

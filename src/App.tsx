@@ -292,13 +292,11 @@ export function App() {
           score={state.score}
           answered={state.answered}
           picked={state.picked}
-          typed={state.typed}
           wasCorrect={state.wasCorrect}
           feedback={state.feedback}
           speechOk={state.speechOk}
           questionKey={`${state.quizSession}-${state.qIndex}`}
           onGrade={grade}
-          onTyped={(text) => dispatch({ type: "typed", text })}
           onNext={nextQuestion}
           onSpeak={speakEnglish}
           onBack={goHome}
